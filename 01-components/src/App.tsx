@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { pizzas } from "./db";
+import Header from "./components/Header";
+import { Link, Outlet } from "react-router-dom";
 
 const PizzaCards = styled.ul`
   display: grid;
@@ -64,6 +66,8 @@ interface PizzaItemProps {
 function App() {
   return (
     <div>
+      <Header />
+      <Outlet />
       <h1>Best Seller Authors</h1>
       <PizzaCards>
         {pizzas.map((pizza) => (
