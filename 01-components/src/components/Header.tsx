@@ -20,10 +20,14 @@ const TopBar = styled.div`
   left: 0;
   z-index: 1030;
 `;
-const Logo = styled.a`
+const Logo = styled(Link)`
   display: flex;
+  > img {
+    margin-right: 3rem;
+    width: 9rem;
+  }
 `;
-const NavTab = styled.div`
+const NavTab = styled(Link)`
   margin: 0;
   padding: 0.3rem 1.8rem;
   display: inline-block;
@@ -38,52 +42,52 @@ const NavTab = styled.div`
   text-transform: uppercase;
   transition: 0.2s ease-out;
 
-  .nav-tab:hover {
+  &:hover {
     color: white;
     text-decoration: none;
     background-color: rgba(255, 255, 255, 0.3);
   }
 
-  .nav-tab.active {
+  .active {
     background-color: rgba(255, 255, 255, 0.2);
     color: #fff2cc;
   }
 
-  .nav-tab img {
+  img {
     height: 2rem;
     margin-bottom: 0.25rem;
   }
 
-  .nav-tab.active img {
+  .active img {
     filter: brightness(0) saturate(100%) invert(93%) sepia(18%) saturate(797%)
       hue-rotate(316deg) brightness(109%) contrast(101%);
   }
 
-  .nav-tab.active:after {
-    content: "";
-    position: absolute;
-    bottom: -1rem;
-    z-index: 1;
-    width: 0px;
-    height: 0px;
-    border-left: 0.6rem solid transparent;
-    border-right: 0.6rem solid transparent;
-    border-top: 1rem solid rgb(205, 51, 51);
+  .active {
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -1rem;
+      z-index: 1;
+      width: 0px;
+      height: 0px;
+      border-left: 0.6rem solid transparent;
+      border-right: 0.6rem solid transparent;
+      border-top: 1rem solid rgb(205, 51, 51);
+    }
   }
 `;
 
 function Header() {
   return (
     <TopBar>
-      <Logo href="">
+      <Logo to={"/"}>
         <img src="images/logo.svg" />
       </Logo>
 
-      <NavTab>
-        <Link to={"/"}>
-          <img src="images/pizza-slice.svg" />
-          <div>Get Pizza</div>
-        </Link>
+      <NavTab to={"/"}>
+        <img src="images/pizza-slice.svg" />
+        <div>Get Pizza</div>
       </NavTab>
     </TopBar>
   );
