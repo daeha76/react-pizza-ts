@@ -1,46 +1,156 @@
-# Getting Started with Create React App
+# 00-get-started
+처음 react를 설치하고, 기본적인 설정들을 실행하고 나서
+아래의 기본적인 폴더와 파일들을 세팅해놓은 상태 입니다.
+1. `public/bootstrap/bootstrap.min.css`
+2. `public/bootstrap/bootstrap.min.css.map`
+3. `public/bootstrap/leaflet.css`
+4. `index.html`에 `css` 추가
+5. `images`폴더 추가
+6. `src/db.ts` 파일 추가
+7. 불필요한 파일들 삭제
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+기본 설정은 되었으니, 지금부터 아래 안내에 따라 피자앱을 하나씩 만들어 보겠습니다.
 
-## Available Scripts
+`00-get-started`가 끝나고 나면 `save-points`의 `01-components`와 같은 상태가 됩니다.
 
-In the project directory, you can run:
+---
+<br>
+<br>
 
-### `npm start`
+# 피자 메뉴 목록 표시
+피자 메뉴를 표시하는 것 부터 진행하도록 하겠습니다.
+App.tsx 파일을 아래와 같이 수정합니다.
+```tsx
+import styled from "styled-components";
+import { pizzas } from "./db";
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+const PizzaCards = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 20rem);
+  grid-gap: 2rem;
+  justify-content: center;
+  padding-left: 0;
+`;
+const PizzaItem = styled.li`
+  height: 10rem;
+  position: inherit;
+  background-size: cover;
+  border-radius: 0.5rem;
+  list-style-type: none;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.4);
+  transition: 0.1s ease-out;
+  &:hover {
+    transform: scale(1.02);
+  }
+`;
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+function App() {
+  return (
+    <div>
+      <h1>Best Seller Authors</h1>
+      <PizzaCards>
+        {pizzas.map((pizza) => (
+          <PizzaItem key={pizza.id}>{pizza.name}</PizzaItem>
+        ))}
+      </PizzaCards>
+    </div>
+  );
+}
 
-### `npm test`
+export default App;
+```
+아래 화면을 보시면 아직 이미지나 글자가 원하는대로 출력되지 않고 있네요.
+![Alt text](readme_images/image.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+App.tsx 파일에 다음을 추가합니다.
+```tsx
+interface PizzaItemProps {
+  imgUrl: string;
+}
+```
+이제 `PizzaItem`의 `styled.li`에 `PizzaItemProps` 인터페이스를 주입하고,
+`App()`의 `PizzaItem`에 이미지url을 추가해 줍니다.
+```tsx
+const PizzaItem = styled.li<PizzaItemProps>`
+    // 생략
+    background-image: ${(props) => `url(${props.imgUrl || null})`};
+    // 생략
+`
+function App() {
+    // 생략
+          <PizzaItem key={pizza.id} imgUrl={pizza.imageUrl}>
+            {pizza.name}
+          </PizzaItem>
+    // 생략
+}
+```
+아래 화면을 보시면 이미지는 추가되어 잘 보입니다.
+![Alt text](readme_images/image-2.png)
 
-### `npm run build`
+이제 피자메뉴에 피자이름, 설명, 가격을 표시하도록 하겠습니다.
+```tsx
+const PizzaItem = styled.li<PizzaItemProps>`
+    // 하단에 입력
+  .pizza-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.7) 30%, rgba(0, 0, 0, 0) 80%);
+    padding: 1rem;
+    color: #fff2cc;
+    cursor: pointer;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    line-height: 1.25rem;
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    .pizza-title {
+      color: white;
+      font-size: 1.4rem;
+      margin: 0.2rem 0 0.4rem 0;
+      font-family: "Bahnschrift", Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+    }
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    .pizza-price {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: 0rem 0.7rem;
+      border-radius: 4px;
+      background-color: #08af08;
+      color: white;
+      line-height: 2rem;
+    }
+  }
+  `
+  // 생략
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  function App() {
+  return (
+    <div>
+      <h1>Best Seller Authors</h1>
+      <PizzaCards>
+        {pizzas.map((pizza) => (
+          <PizzaItem key={pizza.id} imgUrl={pizza.imageUrl}>
+            <div className="pizza-info">
+              <div className="pizza-title">{pizza.name}</div>
+              <div className="pizza-description">{pizza.description}</div>
+              <div className="pizza-price">£{pizza.basePrice}</div>
+            </div>
+          </PizzaItem>
+        ))}
+      </PizzaCards>
+    </div>
+  );
+}
+  ```
 
-### `npm run eject`
+# 상단에 메뉴 만들기
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# Header.tsx 만들기
+상단에 메뉴를 표시할 header를 생성합니다.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+`..\src\components\Header.tsx`
