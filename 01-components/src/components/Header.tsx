@@ -1,6 +1,10 @@
-import { Link } from "react-router-dom";
-import { styled } from "styled-components";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import styled, { css } from "styled-components";
 
+interface NavTabProps {
+  active?: boolean; // active 프롭을 선택적으로 사용하도록 정의
+}
 const TopBar = styled.div`
   height: 5rem;
   background-color: rgb(192, 0, 0);
@@ -20,14 +24,14 @@ const TopBar = styled.div`
   left: 0;
   z-index: 1030;
 `;
-const Logo = styled(Link)`
+const Logo = styled(NavLink)`
   display: flex;
   > img {
     margin-right: 3rem;
     width: 9rem;
   }
 `;
-const NavTab = styled(Link)`
+const NavTab = styled(NavLink)<NavTabProps>`
   margin: 0;
   padding: 0.3rem 1.8rem;
   display: inline-block;
@@ -48,7 +52,7 @@ const NavTab = styled(Link)`
     background-color: rgba(255, 255, 255, 0.3);
   }
 
-  .active {
+  &.active {
     background-color: rgba(255, 255, 255, 0.2);
     color: #fff2cc;
   }
@@ -58,26 +62,22 @@ const NavTab = styled(Link)`
     margin-bottom: 0.25rem;
   }
 
-  .active img {
+  &.active img {
     filter: brightness(0) saturate(100%) invert(93%) sepia(18%) saturate(797%)
       hue-rotate(316deg) brightness(109%) contrast(101%);
   }
-
-  .active {
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: -1rem;
-      z-index: 1;
-      width: 0px;
-      height: 0px;
-      border-left: 0.6rem solid transparent;
-      border-right: 0.6rem solid transparent;
-      border-top: 1rem solid rgb(205, 51, 51);
-    }
+  &.active:after {
+    content: "";
+    position: absolute;
+    bottom: -1rem;
+    z-index: 1;
+    width: 0px;
+    height: 0px;
+    border-left: 0.6rem solid transparent;
+    border-right: 0.6rem solid transparent;
+    border-top: 1rem solid rgb(205, 51, 51);
   }
 `;
-
 function Header() {
   return (
     <TopBar>
@@ -85,7 +85,12 @@ function Header() {
         <img src="images/logo.svg" />
       </Logo>
 
-      <NavTab to={"/"}>
+      <NavTab
+        to={"/"}
+        className={({ isActive, isPending }) =>
+          isPending ? "pending" : isActive ? "active" : ""
+        }
+      >
         <img src="images/pizza-slice.svg" />
         <div>Get Pizza</div>
       </NavTab>
