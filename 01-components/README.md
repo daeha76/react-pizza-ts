@@ -129,6 +129,8 @@ const PizzaItem = styled.li<PizzaItemProps>`
 }
   ```
 
+# 상단에 메뉴 만들기
+
 # Header.tsx 만들기
 상단에 메뉴를 표시할 header를 생성합니다.
 
