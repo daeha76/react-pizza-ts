@@ -11,21 +11,21 @@ Blazor와 React의 장단점 등을 파악할 수 있을 것으로 생각합니�
 #### 한글 버전 https://github.com/blazorstudy/blazor-workshop
 
 # 먼저 해야할 일
-1. 프로젝트 생성
+## 1. 프로젝트 생성
 ```powershell
 npx create-react-app {프로젝트명} --template=typescript
 ```
-2. react-router-dom 설치
+## 2. react-router-dom 설치
 ```powershell
 npm i react-router-dom
 npm i @types/react-router-dom
 ```
-3. styled-components 설치
+## 3. styled-components 설치
 ```powershell
 npm i --save-dev @types/styled-components
 npm i --save styled-components
 ```
-4. ESLint 설치, Prettier 설치
+## 4. ESLint 설치, Prettier 설치
 ```powershell
 npm install --save-dev eslint prettier
 ```
@@ -37,7 +37,7 @@ npm install --save-dev eslint prettier
 	printWidth: 100,
   }
 ```
-5. ESLint 설정
+## 5. ESLint 설정
 ```Powershell
 npx eslint --init
 ```
@@ -57,7 +57,7 @@ npx eslint --init
 	},
   }
   ```
-6. `package.json` 파일에 아래 내용 추가
+## 6. `package.json` 파일에 아래 내용 추가
 ```json
 {
 	//...생략...
@@ -72,7 +72,7 @@ npx eslint --init
 	//...생략...
 }
 ```
-7. 컴포넌트를 절대경로로 설정 : `tsconfig.json`
+## 7. 컴포넌트를 절대경로로 설정 : `tsconfig.json`
 ```json
 {
 	"compilerOptions": {

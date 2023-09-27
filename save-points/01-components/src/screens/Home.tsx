@@ -1,20 +1,6 @@
 import styled from "styled-components";
-import { pizzas } from "./db";
-import Header from "./components/Header";
-import { Outlet } from "react-router-dom";
+import { pizzas } from "../db";
 
-const Container = styled.div`
-  display: flex;
-  height: 100%;
-  z-index: 1;
-  background-color: white;
-`;
-const Main = styled.div`
-  flex-grow: 1;
-  overflow-y: auto;
-  background: linear-gradient(rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.4) 80%);
-  padding: 1.5rem !important;
-`;
 const PizzaCards = styled.ul`
   display: grid;
   grid-template-columns: repeat(auto-fill, 20rem);
@@ -75,27 +61,18 @@ interface PizzaItemProps {
   imgUrl: string;
 }
 
-function App() {
+export default function Home() {
   return (
-    <div>
-      <Header />
-      <Container>
-        <Main>
-          <PizzaCards>
-            {pizzas.map((pizza) => (
-              <PizzaItem key={pizza.id} imgUrl={pizza.imageUrl}>
-                <div className="pizza-info">
-                  <div className="pizza-title">{pizza.name}</div>
-                  <div className="pizza-description">{pizza.description}</div>
-                  <div className="pizza-price">£{pizza.basePrice}</div>
-                </div>
-              </PizzaItem>
-            ))}
-          </PizzaCards>
-        </Main>
-      </Container>
-    </div>
+    <PizzaCards>
+      {pizzas.map((pizza) => (
+        <PizzaItem key={pizza.id} imgUrl={pizza.imageUrl}>
+          <div className="pizza-info">
+            <div className="pizza-title">{pizza.name}</div>
+            <div className="pizza-description">{pizza.description}</div>
+            <div className="pizza-price">£{pizza.basePrice}</div>
+          </div>
+        </PizzaItem>
+      ))}
+    </PizzaCards>
   );
 }
-
-export default App;

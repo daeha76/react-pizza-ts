@@ -1,6 +1,8 @@
+> node_modules 폴더가 없거나 실행이 잘 안된다면<br>
+> [README.md](..\README.md#먼저-해야할-일)파일을 참조하셔서 node_modules를 설치해야 합니다.
+
 # 00-get-started
-처음 react를 설치하고, 기본적인 설정들을 실행하고 나서
-아래의 기본적인 폴더와 파일들을 세팅해놓은 상태 입니다.
+처음 react를 설치하고, 기본적인 설정들을 실행하고 나서 아래의 기본적인 폴더와 파일들을 세팅해놓은 상태 입니다.
 1. `public/bootstrap/bootstrap.min.css`
 2. `public/bootstrap/bootstrap.min.css.map`
 3. `public/bootstrap/leaflet.css`
@@ -303,7 +305,165 @@ export default Header;
 아래 화면을 보시면 상단바가 잘 적용되어 있습니다.
 ![Alt text](readme_images/image-4.png)
 
+화면은 모두 구성이 되었지만 `App.tsx`의 코드를 정리할 필요가 있어 보입니다.<br>
+잠시 리팩토링까지 하고 넘어가도록 하겠습니다.<br>
+`src` 폴더 하단에 `Root.tsx` 파일을 만들어줍니다.<br>
+path : `..src/Root.tsx`<br><br>
+우선 `Root.tsx`에서 사용할 `styled`와 `Header`을 `import` 해줍니다.<br>
+아래 코드에서 `<Outlet />`은 `Header`의 `NavTab`에서 경로를 지정하여 변경하게 될 경우 해당 페이지를 반영하게될 자리 입니다.
+
+```tsx
+import { styled } from "styled-components";
+import { Outlet } from "react-router-dom";
+import Header from "components/Header";
+```
+그리고 `Root`를 `export` 해줍니다.
+```tsx
+export default function Root() {
+  return <div></div>;
+}
+```
+`App.tsx` 파일에서 Container와 Main을 복사해서 가져옵니다.
+```tsx
+const Container = styled.div`
+  display: flex;
+  height: 100%;
+  z-index: 1;
+  background-color: white;
+`;
+const Main = styled.div`
+  flex-grow: 1;
+  overflow-y: auto;
+  background: linear-gradient(rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.4) 80%);
+  padding: 1.5rem !important;
+`;
+```
+이제 `Root`함수를 최종적으로 수정하여 줍니다.
+```tsx
+export default function Root() {
+  return (
+    <div>
+      <Header />
+      <Container>
+        <Main>
+          <Outlet />
+        </Main>
+      </Container>
+    </div>
+  );
+}
+```
+---
+이번에는 `src` 폴더 안에 `screens`폴더를 만들어 줍니다.<br>
+우리가 만드는 화면을 이 폴더에서 관리할 예정입니다.<br>
+`screens` 폴더 안에 `Home.tsx` 파일을 만들어 줍니다.<br>
+path : `..src/screens/Home.tsx`<br><br>
+`App.tsx` 파일안에 있는 피자 메뉴와 관련한 내용들을 옮겨줍니다.
+```tsx
+import styled from "styled-components";
+import { pizzas } from "../db";
+const PizzaCards = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 20rem);
+  grid-gap: 2rem;
+  justify-content: center;
+  padding-left: 0;
+`;
+const PizzaItem = styled.li<PizzaItemProps>`
+  height: 10rem;
+  position: relative;
+  background-image: ${(props) => `url(${props.imgUrl || null})`};
+  background-size: cover;
+  border-radius: 0.5rem;
+  list-style-type: none;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.4);
+  transition: 0.1s ease-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  .pizza-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.7) 30%, rgba(0, 0, 0, 0) 80%);
+    padding: 1rem;
+    color: #fff2cc;
+    cursor: pointer;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    line-height: 1.25rem;
+
+    .pizza-title {
+      color: white;
+      font-size: 1.4rem;
+      margin: 0.2rem 0 0.4rem 0;
+      font-family: "Bahnschrift", Arial, Helvetica, sans-serif;
+      text-transform: uppercase;
+    }
+
+    .pizza-price {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: 0rem 0.7rem;
+      border-radius: 4px;
+      background-color: #08af08;
+      color: white;
+      line-height: 2rem;
+    }
+  }
+`;
+interface PizzaItemProps {
+  imgUrl: string;
+}
+
+export default function Home() {
+  return (
+    <PizzaCards>
+      {pizzas.map((pizza) => (
+        <PizzaItem key={pizza.id} imgUrl={pizza.imageUrl}>
+          <div className="pizza-info">
+            <div className="pizza-title">{pizza.name}</div>
+            <div className="pizza-description">{pizza.description}</div>
+            <div className="pizza-price">£{pizza.basePrice}</div>
+          </div>
+        </PizzaItem>
+      ))}
+    </PizzaCards>
+  );
+}
+```
+이번에는 `Router.tsx` 파일을 수정합니다.<br>
+`router`를 `Router`로 바꿔주었습니다.
+```tsx
+import { createBrowserRouter } from "react-router-dom";
+import Root from "Root";
+import Home from "screens/Home";
+
+const Router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+    ],
+  },
+]);
+
+export default Router;
+```
+대소문자를 바꿔주었으니 `router`를 `import`해서 사용하는 `index.tsx` 파일의 `router` 역시 `Router`로 변경하여 주겠습니다.<br>
+이제 리팩토링까지 마쳤습니다.
+
 <br>
-이번 섹션은 피자 메뉴를 카드로 만들어서 적용하고, 상단바를 구성해 보았습니다.
+이번 섹션은 피자 메뉴를 카드로 만들어서 적용하고, 상단바를 구성하고 리팩토링까지 해보았습니다.
 이제 다음 섹션으로 넘어가보도록 하겠습니다.
 
