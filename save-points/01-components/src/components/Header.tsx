@@ -1,10 +1,6 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
-interface NavTabProps {
-  active?: boolean; // active 프롭을 선택적으로 사용하도록 정의
-}
 const TopBar = styled.div`
   height: 5rem;
   background-color: rgb(192, 0, 0);
@@ -31,7 +27,7 @@ const Logo = styled(NavLink)`
     width: 9rem;
   }
 `;
-const NavTab = styled(NavLink)<NavTabProps>`
+const NavTab = styled(NavLink)`
   margin: 0;
   padding: 0.3rem 1.8rem;
   display: inline-block;
