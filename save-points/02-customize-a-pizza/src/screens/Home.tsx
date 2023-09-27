@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { pizzas } from "../db";
+import { useState } from "react";
+import IPizza from "interface/IPizza";
+import ConfigurePizzaDialog from "./ConfigurePizzaDialog";
 
 const PizzaCards = styled.ul`
   display: grid;
@@ -58,10 +61,22 @@ const PizzaItem = styled.li<{ $imgurl: string }>`
   }
 `;
 export default function Home() {
+  const [selectedPizza, setSelectedPizza] = useState<IPizza | null>(null);
+  const [showSelectPizzaDialog, setShowSelectPizzaDialog] = useState(false);
+  const openConfigureDialog = (pizza: IPizza) => {
+    setSelectedPizza(pizza);
+    setShowSelectPizzaDialog(true);
+  };
+  console.log(selectedPizza);
+  console.log(showSelectPizzaDialog);
   return (
     <PizzaCards>
       {pizzas.map((pizza) => (
-        <PizzaItem key={pizza.id} $imgurl={pizza.imageUrl}>
+        <PizzaItem
+          key={pizza.id}
+          $imgurl={pizza.imageUrl}
+          onClick={() => openConfigureDialog(pizza)}
+        >
           <div className="pizza-info">
             <div className="pizza-title">{pizza.name}</div>
             <div className="pizza-description">{pizza.description}</div>
@@ -69,6 +84,11 @@ export default function Home() {
           </div>
         </PizzaItem>
       ))}
+      {/* 모달이 보여지는 부분입니다. 단축평가를 통해 ConfigurePizzaDialog를 띄워줍니다. */}
+      {/* ConfigurePizzaDialog에 selectedPizza도 전달하고 있습니다. */}
+      {showSelectPizzaDialog && selectedPizza && (
+        <ConfigurePizzaDialog pizza={selectedPizza} />
+      )}
     </PizzaCards>
   );
 }

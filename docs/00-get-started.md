@@ -85,22 +85,17 @@ export default App;
 <br>
 
 이제 피자명을 더 잘 보이게 하고 이미지와 가격을 보기좋게 만들기 위해 App.tsx 파일에 다음을 추가합니다.
-```tsx
-interface PizzaItemProps {
-  imgUrl: string;
-}
-```
-이제 `PizzaItem`의 `styled.li`에 `PizzaItemProps` 인터페이스를 주입하고,
+이제 `PizzaItem`의 `styled.li`을 아래와 같이 수정하,
 `App()`의 `PizzaItem`에 이미지url을 추가해 줍니다.
 ```tsx
-const PizzaItem = styled.li<PizzaItemProps>`
+const PizzaItem = styled.li<{ $imgurl: string }>`
     // 생략
-    background-image: ${(props) => `url(${props.imgUrl || null})`};
+    background-image: ${(props) => `url(${props.$imgurl || null})`};
     // 생략
 `
 function App() {
     // 생략
-          <PizzaItem key={pizza.id} imgUrl={pizza.imageUrl}>
+          <PizzaItem key={pizza.id} $imgurl={pizza.imageUrl}>
             {pizza.name}
           </PizzaItem>
     // 생략
@@ -114,7 +109,7 @@ function App() {
 
 이제 피자메뉴에 피자이름, 설명, 가격을 표시하도록 하겠습니다.
 ```tsx
-const PizzaItem = styled.li<PizzaItemProps>`
+const PizzaItem = styled.li<{ $imgurl: string }>`
     // 하단에 입력
   .pizza-info {
     position: absolute;
@@ -160,7 +155,7 @@ const PizzaItem = styled.li<PizzaItemProps>`
         <Main>
           <PizzaCards>
             {pizzas.map((pizza) => (
-              <PizzaItem key={pizza.id} imgUrl={pizza.imageUrl}>
+              <PizzaItem key={pizza.id} $imgurl={pizza.imageUrl}>
                 <div className="pizza-info">
                   <div className="pizza-title">{pizza.name}</div>
                   <div className="pizza-description">{pizza.description}</div>
@@ -178,6 +173,11 @@ const PizzaItem = styled.li<PizzaItemProps>`
 아래 화면처럼 잘 렌더링되고 있나요?
 
 ![Alt text](readme_images/image-3.png)
+
+여기서도 한가지 문제점이 있습니다.<br>
+피자 가격을 보시면 소숫점 둘째자리까지 모두 표시되고 있지 않네요.<br>
+접근자 프로퍼티를 사용해서 변경해보겠습니다.<br>
+
 ---
 <br>
 
@@ -369,10 +369,10 @@ const PizzaCards = styled.ul`
   justify-content: center;
   padding-left: 0;
 `;
-const PizzaItem = styled.li<PizzaItemProps>`
+const PizzaItem = styled.li<{ $imgurl: string }>`
   height: 10rem;
   position: relative;
-  background-image: ${(props) => `url(${props.imgUrl || null})`};
+  background-image: ${(props) => `url(${props.$imgurl || null})`};
   background-size: cover;
   border-radius: 0.5rem;
   list-style-type: none;
@@ -418,15 +418,12 @@ const PizzaItem = styled.li<PizzaItemProps>`
     }
   }
 `;
-interface PizzaItemProps {
-  imgUrl: string;
-}
 
 export default function Home() {
   return (
     <PizzaCards>
       {pizzas.map((pizza) => (
-        <PizzaItem key={pizza.id} imgUrl={pizza.imageUrl}>
+        <PizzaItem key={pizza.id} $imgurl={pizza.imageUrl}>
           <div className="pizza-info">
             <div className="pizza-title">{pizza.name}</div>
             <div className="pizza-description">{pizza.description}</div>
