@@ -176,8 +176,11 @@ const PizzaItem = styled.li<{ $imgurl: string }>`
 
 여기서도 한가지 문제점이 있습니다.<br>
 피자 가격을 보시면 소숫점 둘째자리까지 모두 표시되고 있지 않네요.<br>
-접근자 프로퍼티를 사용해서 변경해보겠습니다.<br>
-
+```tsx
+<div className="pizza-price">£{pizza.basePrice}</div>
+// 위의 구문을 아래처럼 바꿔주세요
+<div className="pizza-price">£{pizza.basePrice.toFixed(2)}</div>
+```
 ---
 <br>
 
