@@ -4,8 +4,6 @@ Blazor로 만든 Pizza App을 React로 만들어보는 프로젝트 입니다.
 저는 Blazor로 만들어진 Pizza App을 React로 만들어보면서,
 Blazor와 React의 장단점 등을 파악할 수 있을 것으로 생각합니다.
 
-(2023-09-26 현재 01번 자료 90% 완성)
-
 ## 원본 출처
 #### 최초(영어) 원본 https://github.com/dotnet-presentations/blazor-workshop
 #### 한글 버전 https://github.com/blazorstudy/blazor-workshop
