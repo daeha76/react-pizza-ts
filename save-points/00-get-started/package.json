@@ -24,10 +24,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-		"format": "prettier --check ./src",
-		"format:fix": "prettier --write ./src",
-		"lint": "eslint ./src",
-		"lint:fix": "eslint --fix ./src"
+    "format": "prettier --check ./src",
+    "format:fix": "prettier --write ./src",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint --fix ./src"
   },
   "eslintConfig": {
     "extends": [
