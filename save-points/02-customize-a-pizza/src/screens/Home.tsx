@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { pizzas } from "../db";
 import { useState } from "react";
-import IPizza from "interface/IPizza";
 import ConfigurePizzaDialog from "./ConfigurePizzaDialog";
+import { Pizza } from "models/Pizza";
+import { PizzaSpecial } from "models/PizzaSpecial";
 
 const PizzaCards = styled.ul`
   display: grid;
@@ -61,14 +62,12 @@ const PizzaItem = styled.li<{ $imgurl: string }>`
   }
 `;
 export default function Home() {
-  const [selectedPizza, setSelectedPizza] = useState<IPizza | null>(null);
+  const [selectedPizza, setSelectedPizza] = useState<Pizza | null>(null);
   const [showSelectPizzaDialog, setShowSelectPizzaDialog] = useState(false);
-  const openConfigureDialog = (pizza: IPizza) => {
-    setSelectedPizza(pizza);
+  const openConfigureDialog = (pizza: PizzaSpecial) => {
+    setSelectedPizza(new Pizza(pizza, pizza.id));
     setShowSelectPizzaDialog(true);
   };
-  console.log(selectedPizza);
-  console.log(showSelectPizzaDialog);
   return (
     <PizzaCards>
       {pizzas.map((pizza) => (
@@ -80,7 +79,7 @@ export default function Home() {
           <div className="pizza-info">
             <div className="pizza-title">{pizza.name}</div>
             <div className="pizza-description">{pizza.description}</div>
-            <div className="pizza-price">£{pizza.basePrice.toFixed(2)}</div>
+            <div className="pizza-price">£{pizza.getFormattedBasePrice()}</div>
           </div>
         </PizzaItem>
       ))}

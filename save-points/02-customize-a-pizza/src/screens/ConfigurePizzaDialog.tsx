@@ -54,6 +54,7 @@ interface IPizzaProps {
   pizza: Pizza;
 }
 export default function ConfigurePizzaDialog({ pizza }: IPizzaProps) {
+  console.log(pizza)
   return (
     <Container>
       <Dialog>
@@ -65,7 +66,7 @@ export default function ConfigurePizzaDialog({ pizza }: IPizzaProps) {
           <Buttons>
             <button className="btn btn-secondary mr-auto">Cancel</button>
             <span className="mr-center">
-              Price: <span className="price">{pizza.basePrice}</span>
+              Price: <span className="price">{pizza.getFormattedTotalPrice()}</span>
             </span>
             <button className="btn btn-success ml-auto">Order</button>
           </Buttons>
