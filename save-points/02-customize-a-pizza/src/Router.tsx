@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Root from "Root";
 import Home from "screens/Home";
 
-const Router = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
@@ -15,4 +15,4 @@ const Router = createBrowserRouter([
   },
 ]);
 
-export default Router;
+export default router;

@@ -65,7 +65,7 @@ export default function Home() {
           <div className="pizza-info">
             <div className="pizza-title">{pizza.name}</div>
             <div className="pizza-description">{pizza.description}</div>
-            <div className="pizza-price">£{pizza.basePrice.toFixed(2)}</div>
+            <div className="pizza-price">£{pizza.getFormattedBasePrice()}</div>
           </div>
         </PizzaItem>
       ))}

@@ -1,4 +1,4 @@
-import IPizza from "interface/IPizza";
+import { Pizza } from "models/Pizza";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -51,7 +51,7 @@ const Buttons = styled.div`
   padding: 0 1rem;
 `;
 interface IPizzaProps {
-  pizza: IPizza;
+  pizza: Pizza;
 }
 export default function ConfigurePizzaDialog({ pizza }: IPizzaProps) {
   return (
