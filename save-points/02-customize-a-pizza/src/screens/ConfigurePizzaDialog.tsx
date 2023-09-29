@@ -1,4 +1,5 @@
 import { Pizza } from "models/Pizza";
+import { useState } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -38,9 +39,24 @@ const Title = styled.div`
     line-height: 1.3rem;
   }
 `;
-const Body = styled.form`
+const FormBodySpan = styled.span`
+  min-width: 110px;
+  text-align: right;
+`;
+const FormBody = styled.form`
   flex-grow: 1;
   padding: 0.5rem 3rem 1rem 0;
+  div {
+    display: flex;
+    margin-top: 1rem;
+    align-items: center;
+  }
+  lavel {
+    text-align: right;
+    width: 200px;
+    margin: 0 1.5rem;
+  }
+  ${FormBodySpan}
 `;
 const Buttons = styled.div`
   height: 4rem;
@@ -54,7 +70,11 @@ interface IPizzaProps {
   pizza: Pizza;
 }
 export default function ConfigurePizzaDialog({ pizza }: IPizzaProps) {
-  console.log(pizza)
+  const [size, setSize] = useState<number>(pizza.defaultSize);
+  const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    pizza.size = parseInt(event.target.value);
+    setSize(pizza.size);
+  };
   return (
     <Container>
       <Dialog>
@@ -62,15 +82,30 @@ export default function ConfigurePizzaDialog({ pizza }: IPizzaProps) {
           <h2>{pizza.name}</h2>
           {pizza.description}
         </Title>
-        <Body>
+        <FormBody>
+          <div>
+            <label>Size:</label>
+            <input
+              type="range"
+              min={pizza.minimumSize}
+              max={pizza.maximumSize}
+              step="1"
+              value={size}
+              onChange={handleSizeChange}
+            />
+            <FormBodySpan>
+              {pizza.size} £{pizza.getFormattedTotalPrice()}
+            </FormBodySpan>
+          </div>
           <Buttons>
             <button className="btn btn-secondary mr-auto">Cancel</button>
             <span className="mr-center">
-              Price: <span className="price">{pizza.getFormattedTotalPrice()}</span>
+              Price:{" "}
+              <span className="price">{pizza.getFormattedTotalPrice()}</span>
             </span>
             <button className="btn btn-success ml-auto">Order</button>
           </Buttons>
-        </Body>
+        </FormBody>
       </Dialog>
     </Container>
   );
