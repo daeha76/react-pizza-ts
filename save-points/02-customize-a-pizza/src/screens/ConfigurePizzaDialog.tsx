@@ -1,6 +1,9 @@
 import { Pizza } from "models/Pizza";
-import { useState } from "react";
+import { Topping } from "models/Topping";
+import { toppings } from "db";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { PizzaTopping } from "models/PizzaTopping";
 
 const Container = styled.div`
   position: absolute;
@@ -58,6 +61,34 @@ const FormBody = styled.form`
   }
   ${FormBodySpan}
 `;
+const SelectedToppings = styled.div`
+  text-align: center;
+  display: block;
+  padding-left: 4rem;
+`;
+const SelectedTopping = styled.div`
+  display: inline-block;
+  background-color: #a04343;
+  color: white;
+  padding: 0.2rem 1rem;
+  border-radius: 2rem;
+  margin: 0.4rem 0.3rem;
+  font-weight: 700;
+  & span {
+    font-weight: 100;
+    font-size: 0.8rem;
+  }
+  & button {
+    background: none;
+    border: none;
+    color: white;
+    padding: 0.2rem 0.2rem 0.3rem 0.2rem;
+    cursor: pointer;
+    &:hover {
+      color: yellow;
+    }
+  }
+`;
 const Buttons = styled.div`
   height: 4rem;
   flex-shrink: 0;
@@ -71,10 +102,64 @@ interface IPizzaProps {
 }
 export default function ConfigurePizzaDialog({ pizza }: IPizzaProps) {
   const [size, setSize] = useState<number>(pizza.defaultSize);
+  const [selectedToppingId, setSelectedToppingId] = useState(-1);
+  const [pizzaToppings, setPizzatoppings] = useState<PizzaTopping[]>([]);
   const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     pizza.size = parseInt(event.target.value);
     setSize(pizza.size);
   };
+  const handleToppingChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const index = parseInt(event.target.value);
+    addTopping(toppings[index]);
+  };
+  const addTopping = (topping: Topping) => {
+    if (pizzaToppings.find((pt) => pt.topping === topping) === undefined) {
+      setPizzatoppings([...pizzaToppings, new PizzaTopping(topping)]);
+    } else {
+      alert("Topping already added!");
+    }
+    setSelectedToppingId(-1);
+  };
+  const pizzaSizeSelect = (
+    <input
+      type="range"
+      min={pizza.minimumSize}
+      max={pizza.maximumSize}
+      step="1"
+      value={size}
+      onChange={handleSizeChange}
+    />
+  );
+  const selectedPizzaPrice = (
+    <FormBodySpan>
+      {pizza.size} £{pizza.getFormattedTotalPrice()}
+    </FormBodySpan>
+  );
+  const loadingToppings = (
+    <select className="custom-select" disabled>
+      <option>(loading...)</option>
+    </select>
+  );
+  const maximumReached = <div>(maximum reached)</div>;
+  const toppingSelectGuide = (
+    <option value="-1" disabled selected>
+      (select)
+    </option>
+  );
+  const toppingSelectOptions = (
+    <select
+      className="custom-select"
+      value={selectedToppingId}
+      onChange={handleToppingChange}
+    >
+      {toppingSelectGuide}
+      {toppings.map((topping, index) => (
+        <option key={index} value={index}>
+          {topping.name} - (+£{topping.getFormattedPrice()})
+        </option>
+      ))}
+    </select>
+  );
   return (
     <Container>
       <Dialog>
@@ -84,19 +169,27 @@ export default function ConfigurePizzaDialog({ pizza }: IPizzaProps) {
         </Title>
         <FormBody>
           <div>
-            <label>Size:</label>
-            <input
-              type="range"
-              min={pizza.minimumSize}
-              max={pizza.maximumSize}
-              step="1"
-              value={size}
-              onChange={handleSizeChange}
-            />
-            <FormBodySpan>
-              {pizza.size} £{pizza.getFormattedTotalPrice()}
-            </FormBodySpan>
+            <label>Size: </label>
+            {pizzaSizeSelect}
+            {selectedPizzaPrice}
           </div>
+          <div>
+            <label>Extra Toppings:</label>
+            {toppings === null
+              ? loadingToppings
+              : pizzaToppings.length >= 6
+              ? maximumReached
+              : toppingSelectOptions}
+          </div>
+          <SelectedToppings>
+            {pizzaToppings.map((tp, index) => (
+              <SelectedTopping key={index}>
+                {tp.topping.name}
+                <span>{tp.topping.getFormattedPrice()}</span>
+                <button type="button">x</button>
+              </SelectedTopping>
+            ))}
+          </SelectedToppings>
           <Buttons>
             <button className="btn btn-secondary mr-auto">Cancel</button>
             <span className="mr-center">
