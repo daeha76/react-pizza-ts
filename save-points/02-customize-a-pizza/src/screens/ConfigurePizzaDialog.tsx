@@ -33,7 +33,7 @@ const Title = styled.div`
   background-color: #444;
   color: #fff2cc;
   padding: 1.3rem 2rem;
-  & h2 {
+  h2 {
     color: white;
     font-size: 1.4rem;
     margin: 0;
@@ -54,10 +54,15 @@ const FormBody = styled.form`
     margin-top: 1rem;
     align-items: center;
   }
-  lavel {
+  label {
     text-align: right;
     width: 200px;
     margin: 0 1.5rem;
+  }
+  input,
+  select {
+    flex-grow: 1;
+    width: unset;
   }
   ${FormBodySpan}
 `;
@@ -74,11 +79,14 @@ const SelectedTopping = styled.div`
   border-radius: 2rem;
   margin: 0.4rem 0.3rem;
   font-weight: 700;
-  & span {
+  span {
     font-weight: 100;
     font-size: 0.8rem;
+    &::before {
+      content: "£";
+    }
   }
-  & button {
+  button {
     background: none;
     border: none;
     color: white;
